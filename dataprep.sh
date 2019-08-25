@@ -1,3 +1,9 @@
+#set-up for single machine or cluster based execution
+. ./cmd.sh
+#set the paths to binaries and other executables
+[ -f path.sh ] && . ./path.sh
+
+
 #Remove existing data
 rm -rf data
 rm -rf exp
