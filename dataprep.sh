@@ -36,3 +36,6 @@ rm ./data/train/wavefilepaths.txt
 
 #Create feature vectors
 ./steps/make_mfcc.sh --nj 1 data/train exp/make_mfcc/train mfcc
+
+#Create Mean Variance Tuning
+steps/compute_cmvn_stats.sh data/train exp/make_mfcc/test mfcc
