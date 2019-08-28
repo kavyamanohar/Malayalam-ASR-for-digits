@@ -5,7 +5,7 @@
 
 
 #Remove existing data
-rm -rf data
+rm -rf data/train
 rm -rf exp
 rm -rf mfcc
 
@@ -14,7 +14,7 @@ mkdir data
 mkdir data/train
 
 echo ============================================================================
-echo "                  Preparing Data Files         	        "
+echo "                  Preparing Data Files forFeatue extraction   	        "
 echo ============================================================================
 
 #Read path of wave files and store it as a temporary file wavefilepaths.txt 
@@ -66,5 +66,48 @@ copy-feats ark:./mfcc/raw_mfcc_train.1.ark ark,t:./mfcc/raw_mfcc_train.1.txt
 steps/compute_cmvn_stats.sh data/train exp/make_mfcc/test mfcc
 
 echo ============================================================================
-echo "                  Preparing Language Model Files        	        "
+echo "                  Preparing Language Model Data Files        	        "
 echo ============================================================================
+
+#Need to remove the hardcoding of 9 in next line.  The function is to extract the utterance id
+realpath ./raw/text/train/*.lab | cut -d '/' -f 9 | cut -d '.' -f 1 > ./data/train/textutt
+
+echo "Creating the list of trascripts"
+paste -d '\n' ./raw/text/train/*.lab > ./data/train/trans
+
+echo "Creating the text file of uttid mapped to transcript"
+paste ./data/train/textutt ./data/train/trans > ./data/train/text
+
+
+echo "Creating LM model creation input file"
+while read line
+do
+echo "<s> $line </s>" >> ./data/train/lm_train.txt
+done <./data/train/trans
+
+
+echo ============================================================================
+echo "                  Preparing the Language Dictionary       	        "
+echo ============================================================================
+echo "Creating the sorted lexicon file"
+sort ./raw/language/lexicon.txt | paste > ./data/dict/lexicon.txt 
+
+
+touch ./data/dict/extra_phones.txt ./data/dict/extra_questions.txt
+
+#echo "Creating the list of Phones"
+#cat ./data/dict/lexicon.txt | cut -d '' -f 2 -> ./data/dict/phones.txt 
+
+#sed 's/^.*    //' > ./data/dict/phones.txt 
+#sed '/sil/d' ./data/dict/lexicon.txt | paste  > ./data/dict/nonsilence_phones.txt
+#sed '/sil/!d' ./data/dict/lexicon.txt | paste | unique  > ./data/dict/optional_silence.txt
+
+
+
+
+
+
+echo ============================================================================
+echo "                   End of Script             	        "
+echo ============================================================================
+
