@@ -58,5 +58,13 @@ echo ===========================================================================
 #Create feature vectors
 ./steps/make_mfcc.sh --nj 1 data/train exp/make_mfcc/train mfcc
 
+#Copy the feature in text file formats for human reading
+copy-feats ark:./mfcc/raw_mfcc_train.1.ark ark,t:./mfcc/raw_mfcc_train.1.txt
+
+
 #Create Mean Variance Tuning
 steps/compute_cmvn_stats.sh data/train exp/make_mfcc/test mfcc
+
+echo ============================================================================
+echo "                  Preparing Language Model Files        	        "
+echo ============================================================================
