@@ -18,12 +18,12 @@ echo "                  Preparing Data Files         	        "
 echo ============================================================================
 
 #Read path of wave files and store it as a temporary file wavefilepaths.txt 
-realpath ./waves/train/*.wav > ./data/train/wavefilepaths.txt
+realpath ./raw/waves/train/*.wav > ./data/train/wavefilepaths.txt
 
 echo "Creating the list of utterence IDs"
 
 #Need to remove the hardcoding of 8 in next line.  The function is to extract the utterance id
-cat ./data/train/wavefilepaths.txt | cut -d '/' -f 8 |cut -d '.' -f 1 > ./data/train/utt
+cat ./data/train/wavefilepaths.txt | cut -d '/' -f 9 |cut -d '.' -f 1 > ./data/train/utt
 
 
 echo "Creating the list of utterence IDs mapped to absolute file paths of wavefiles"
