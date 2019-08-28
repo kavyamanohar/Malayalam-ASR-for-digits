@@ -22,7 +22,7 @@ realpath ./raw/waves/train/*.wav > ./data/train/wavefilepaths.txt
 
 echo "Creating the list of utterence IDs"
 
-#Need to remove the hardcoding of 8 in next line.  The function is to extract the utterance id
+#Need to remove the hardcoding of 9 in next line.  The function is to extract the utterance id
 cat ./data/train/wavefilepaths.txt | cut -d '/' -f 9 |cut -d '.' -f 1 > ./data/train/utt
 
 
