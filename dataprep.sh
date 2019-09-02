@@ -5,14 +5,14 @@
 
 
 #Remove existing data
-rm -rf data/train
+rm -rf data
 rm -rf exp
 rm -rf mfcc
 
 #Create fresh data files
 mkdir data
 mkdir data/train
-
+mkdir data/dict
 echo ============================================================================
 echo "                  Preparing Data Files forFeatue extraction   	        "
 echo ============================================================================
@@ -95,13 +95,8 @@ sort ./raw/language/lexicon.txt | paste > ./data/dict/lexicon.txt
 
 touch ./data/dict/extra_phones.txt ./data/dict/extra_questions.txt
 
-#echo "Creating the list of Phones"
-#cat ./data/dict/lexicon.txt | cut -d '' -f 2 -> ./data/dict/phones.txt 
-
-#sed 's/^.*    //' > ./data/dict/phones.txt 
-#sed '/sil/d' ./data/dict/lexicon.txt | paste  > ./data/dict/nonsilence_phones.txt
-#sed '/sil/!d' ./data/dict/lexicon.txt | paste | unique  > ./data/dict/optional_silence.txt
-
+echo "Creating the list of Phones"
+cat ./data/dict/lexicon.txt | cut -d '	' -f 2  - | tr ' ' '\n' | sort | uniq > ./data/dict/phones.txt 
 
 
 
