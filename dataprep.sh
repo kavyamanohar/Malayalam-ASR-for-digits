@@ -162,7 +162,46 @@ utils/mkgraph.sh --mono data/lang_bigram exp/mono exp/mono/graph || exit 1
 steps/decode.sh --config conf/decode.config --nj $nj --cmd "$decode_cmd" exp/mono/graph data/test exp/mono/decode
 
 
+
+echo
+echo "===== MONO ALIGNMENT ====="
+echo
+steps/align_si.sh --nj $nj --cmd "$train_cmd" data/train data/$train_lang exp/mono exp/mono_ali || exit 1
+
+echo
+echo "===== TRI1 (first triphone pass) TRAINING ====="
+echo
+steps/train_deltas.sh --cmd "$train_cmd" 2000 11000 data/train data/$train_lang exp/mono_ali exp/tri1 || exit 1
+
+echo "===== TRI1 (first triphone pass) DECODING ====="
+echo
+utils/mkgraph.sh data/$train_lang exp/tri1 exp/tri1/graph || exit 1
+steps/decode.sh --config conf/decode.config --nj $nj --cmd "$decode_cmd" exp/tri1/graph data/test exp/tri1/decode
+
+echo "===== TRI2 (second triphone pass) ALIGNMENT ====="
+echo
+steps/align_si.sh --nj $nj --cmd "$train_cmd" data/train/ data/$train_lang exp/tri1 exp/tri1_ali
+
+echo "===== TRI2 (second triphone pass) LDA Training ====="
+echo
+
+steps/train_lda_mllt.sh --splice-opts "--left-context=3 --right-context=3" 2000 11000 data/train data/$train_lang exp/tri1_ali exp/tri2
+
+echo "===== TRI2 (second triphone pass) DECODING ====="
+echo
+utils/mkgraph.sh data/$train_lang exp/tri2 exp/tri2/graph 
+steps/decode.sh --config conf/decode.config --nj $nj --cmd "$decode_cmd" exp/tri2/graph data/test exp/tri2/decode
+
+
+
+
+
+
+
+
+
+
+
 echo ============================================================================
 echo "                   End of Script             	        "
 echo ============================================================================
-
