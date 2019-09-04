@@ -1,5 +1,5 @@
-!sil SIL
-<UNK> SIL
+!sil	SIL
+<UNK>	SIL
 aaru	AX R U
 anchu	AN CH U
 ettu	E T U
