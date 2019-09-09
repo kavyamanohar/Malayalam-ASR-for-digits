@@ -118,6 +118,7 @@ echo ===========================================================================
 echo "                  Preparing the Language Model Files    	        "
 echo ============================================================================
 
+#kaldi_root_dir='../..'
 kaldi_root_dir='/home/kavya/kavyadev/kaldi'
 basepath='.'
 
@@ -125,10 +126,10 @@ basepath='.'
 lm_arpa_path=$basepath/data/local/lm
 
 train_dict=dict
-train_lang=lang_bigram
+train_lang=lang_trigram
 train_folder=train
 
-n_gram=2 # This specifies bigram or trigram. for bigram set n_gram=2 for tri_gram set n_gram=3
+n_gram=3 # This specifies bigram or trigram. for bigram set n_gram=2 for tri_gram set n_gram=3
 
 echo ============================================================================
 echo "                   Creating  n-gram LM               	        "
@@ -152,13 +153,13 @@ echo "===== MONO TRAINING ====="
 echo
 
 nj=1
-steps/train_mono.sh --nj $nj --cmd "$train_cmd"  data/train data/lang_bigram exp/mono  || exit 1
+steps/train_mono.sh --nj $nj --cmd "$train_cmd"  data/train data/$train_lang exp/mono  || exit 1
 
 
 echo
 echo "===== MONO DECODING ====="
 echo
-utils/mkgraph.sh --mono data/lang_bigram exp/mono exp/mono/graph || exit 1
+utils/mkgraph.sh --mono data/$train_lang exp/mono exp/mono/graph || exit 1
 steps/decode.sh --config conf/decode.config --nj $nj --cmd "$decode_cmd" exp/mono/graph data/test exp/mono/decode
 
 
