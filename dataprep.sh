@@ -126,10 +126,10 @@ basepath='.'
 lm_arpa_path=$basepath/data/local/lm
 
 train_dict=dict
-train_lang=lang_trigram
+train_lang=lang_bigram
 train_folder=train
 
-n_gram=3 # This specifies bigram or trigram. for bigram set n_gram=2 for tri_gram set n_gram=3
+n_gram=2 # This specifies bigram or trigram. for bigram set n_gram=2 for tri_gram set n_gram=3
 
 echo ============================================================================
 echo "                   Creating  n-gram LM               	        "
