@@ -1,5 +1,6 @@
-#set-up for single machine or cluster based execution
-. ./cmd.sh
+# This script transcribes a wavefile sampled at 16 kHz, result will be stored in /transcription/one-best-hypothesis.txt
+# This script is based on the blogpost by  Josh Meyer: http://jrmeyer.github.io/asr/2016/09/12/Using-built-GMM-model-Kaldi.html
+
 #set the paths to binaries and other executables
 [ -f path.sh ] && . ./path.sh
 
