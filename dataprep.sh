@@ -37,7 +37,7 @@ echo "Creating the list of utterence IDs mapped to absolute file paths of wavefi
 paste ./data/$folder/utt ./data/$folder/wavefilepaths.txt > ./data/$folder/wav.scp
 
 
-echo "Creating the list of Utterance IDs"
+echo "Creating the list of speaker IDs"
 
 #Create speaker id list
 cat ./data/$folder/utt | cut -d 'F' -f 1 > ./data/$folder/spk
