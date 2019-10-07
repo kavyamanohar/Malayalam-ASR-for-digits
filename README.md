@@ -2,6 +2,8 @@ This is a [kaldi](https://kaldi-asr.org/) based recipie for Malayalam digit reco
 
 Details on how to run this script and the working is described here.
 
+
+
 # RAW DATA 
 
 
@@ -108,4 +110,40 @@ From the `/raw` data directory of language vocabulary lexicon, a list of phones 
 Once the data is ready n-gram language model can be created. Here it is done using IRSTLM toolkit.It prodices language model in ARPA format. Final language model in FST format, `G.fst` is available in `/data/lang_ngram/G.fst`.
 
 # TRAINING GMM-HMM
+
+To run the script for training and decoding,
+
+```
+$train_decode.sh
+```
+
+There are different options for training and Decoding. 
+
+- monophone 
+- triphone 
+- triphone LDA
+- triphone SAT
+
+Once training is done, there will be decoding graphs available in `/exp` directory.
+
+Decoding will display corresponding word error rate (WER) and Sentance error rates (SER) in percentage
+
+
+# DO FEATURE EXTRACTION, LM CREATION, TRAINING and DECODING all at once
+
+```
+$run.sh
+```
+
+
+# TRANSCRIBE your Speech
+
+If you have an audio clip of Malayalam digit utterance, you can transcribe it using the trained model in `/exp`. Keep your audio file in wave format in `/inputaudio` directory and run,
+
+```
+$/transcribe.sh
+```
+
+The result will in `/inputaudio/transcriptions/one-best-hypothesis.txt`
+
 
