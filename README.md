@@ -141,9 +141,9 @@ $run.sh
 If you have an audio clip of Malayalam digit utterance, you can transcribe it using the trained model in `/exp`. Keep your audio file in wave format in `/inputaudio` directory and run,
 
 ```
-$/transcribe.sh
+$./transcribe.sh
 ```
 
-The result will in `/inputaudio/transcriptions/one-best-hypothesis.txt`
+The result will in `./inputaudio/transcriptions/one-best-hypothesis.txt`
 
 
