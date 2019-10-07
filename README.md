@@ -1,3 +1,7 @@
+This is a [kaldi](https://kaldi-asr.org/) based recipie for Malayalam digit recognition. You need a working Kaldi directory to run this script.
+
+Details on how to run this script and the working is described here.
+
 # RAW DATA 
 
 
@@ -14,15 +18,15 @@
 
 # SPEECH FEATURE EXTRACTION
 
-To extract the features from audio clips run the following script. It prepares the data and extract features as described below.
-
+To extract the features from audio clips, run the following script. 
 ```
 $./extractfeatures.sh
 ```
+It prepares the data and extract features as described below.
 
 ## DATA PREPARATION
 
-From the `/raw` directory a `/data` directory is created with the following contents. This representation isimportant for further processing with kaldi tools
+From the `/raw` directory a `/data` directory is created with the following contents. This representation is important for further processing with kaldi tools.
 
 - `/data`
     - `/train`
@@ -104,3 +108,4 @@ From the `/raw` data directory of language vocabulary lexicon, a list of phones 
 Once the data is ready n-gram language model can be created. Here it is done using IRSTLM toolkit.It prodices language model in ARPA format. Final language model in FST format, `G.fst` is available in `/data/lang_ngram/G.fst`.
 
 # TRAINING GMM-HMM
+
