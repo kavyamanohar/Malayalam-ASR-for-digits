@@ -8,15 +8,19 @@ echo ===========================================================================
 echo "          Preparing Data Files for Language Modeling  	        "
 echo ============================================================================
 
+for folder in train test
+do
+
 #The function is to extract the utterance id
-realpath ./raw/text/train/*.lab | xargs -l basename -s .lab > ./data/train/textutt
+realpath ./raw/text/$folder/*.lab | xargs -l basename -s .lab > ./data/$folder/textutt
 
 echo "Creating the list of transcripts"
-paste -d '\n' ./raw/text/train/*.lab > ./data/train/trans
+paste -d '\n' ./raw/text/$folder/*.lab > ./data/$folder/trans
 
 echo "Creating the text file of uttid mapped to transcript"
-paste ./data/train/textutt ./data/train/trans > ./data/train/text
+paste ./data/$folder/textutt ./data/$folder/trans > ./data/$folder/text
 
+done
 
 echo "Creating LM model creation input file"
 while read line
