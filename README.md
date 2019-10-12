@@ -114,7 +114,7 @@ Once the data is ready n-gram language model can be created. Here it is done usi
 To run the script for training and decoding,
 
 ```
-$train_decode.sh
+$train.sh
 ```
 
 There are different options for training and Decoding. 
@@ -123,6 +123,8 @@ There are different options for training and Decoding.
 - triphone 
 - triphone LDA
 - triphone SAT
+
+# TESTING the model
 
 Once training is done, there will be decoding graphs available in `/exp` directory.
 
@@ -141,7 +143,7 @@ $run.sh
 If you have an audio clip of Malayalam digit utterance, you can transcribe it using the trained model in `/exp`. Keep your audio file in wave format in `/inputaudio` directory and run,
 
 ```
-$./transcribe.sh
+$./speech2text.sh
 ```
 
 The result will in `./inputaudio/transcriptions/one-best-hypothesis.txt`
