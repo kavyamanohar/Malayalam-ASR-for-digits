@@ -2,7 +2,9 @@ This is a [kaldi](https://kaldi-asr.org/) based recipie for Malayalam digit reco
 
 Details on how to run this script and the working is described here.
 
+To install Kaldi, see the documentation [here](https://kaldi-asr.org/doc/install.html)
 
+The source code of `/ml_digits` has to be placed in the `/egs` directory of Kaldi installation directory.
 
 # RAW DATA 
 
