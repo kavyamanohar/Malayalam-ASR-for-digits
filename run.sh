@@ -179,37 +179,37 @@ echo
 utils/mkgraph.sh data/$train_lang exp/tri1 exp/tri1/graph || exit 1
 steps/decode.sh --config conf/decode.config --nj $nj --cmd "$decode_cmd" exp/tri1/graph data/test exp/tri1/decode
 
-# echo "===== TRI_LDA (second triphone pass) ALIGNMENT ====="
-# echo
-# steps/align_si.sh --nj $nj --cmd "$train_cmd" data/train/ data/$train_lang exp/tri1 exp/tri1_ali
+echo "===== TRI_LDA (second triphone pass) ALIGNMENT ====="
+echo
+steps/align_si.sh --nj $nj --cmd "$train_cmd" data/train/ data/$train_lang exp/tri1 exp/tri1_ali
 
-# echo "===== TRI_LDA (second triphone pass) LDA Training ====="
-# echo
+echo "===== TRI_LDA (second triphone pass) LDA Training ====="
+echo
 
-# steps/train_lda_mllt.sh --splice-opts "--left-context=2 --right-context=2" 2000 11000 data/train data/$train_lang exp/tri1_ali exp/tri_lda
+steps/train_lda_mllt.sh --splice-opts "--left-context=2 --right-context=2" 2000 11000 data/train data/$train_lang exp/tri1_ali exp/tri_lda
 
-# echo "===== TRI_LDA (second triphone pass) DECODING ====="
-# echo
-# utils/mkgraph.sh data/$train_lang exp/tri_lda exp/tri_lda/graph 
-# steps/decode.sh --config conf/decode.config --nj $nj --cmd "$decode_cmd" exp/tri_lda/graph data/test exp/tri_lda/decode
-
-
-# echo "===== TRI_SAT (third triphone pass) ALIGNMENT ====="
-# echo
-# steps/align_si.sh --nj $nj --cmd "$train_cmd" data/train/ data/$train_lang exp/tri_lda exp/tri_lda_ali
-
-# echo "===== TRI_SAT (third triphone pass) SAT Training ====="
-# echo
+echo "===== TRI_LDA (second triphone pass) DECODING ====="
+echo
+utils/mkgraph.sh data/$train_lang exp/tri_lda exp/tri_lda/graph 
+steps/decode.sh --config conf/decode.config --nj $nj --cmd "$decode_cmd" exp/tri_lda/graph data/test exp/tri_lda/decode
 
 
-# steps/train_sat.sh  --cmd "$train_cmd" \
-# 4200 40000 data/train data/$train_lang exp/tri_lda_ali exp/tri_sat || exit 1;
+echo "===== TRI_SAT (third triphone pass) ALIGNMENT ====="
+echo
+steps/align_si.sh --nj $nj --cmd "$train_cmd" data/train/ data/$train_lang exp/tri_lda exp/tri_lda_ali
+
+echo "===== TRI_SAT (third triphone pass) SAT Training ====="
+echo
 
 
-# echo "===== TRI_LDA (second triphone pass) DECODING ====="
-# echo
-# utils/mkgraph.sh data/$train_lang exp/tri_sat exp/tri_sat/graph 
-# steps/decode.sh --config conf/decode.config --nj $nj --cmd "$decode_cmd" exp/tri_sat/graph data/test exp/tri_sat/decode
+steps/train_sat.sh  --cmd "$train_cmd" \
+4200 40000 data/train data/$train_lang exp/tri_lda_ali exp/tri_sat || exit 1;
+
+
+echo "===== TRI_LDA (second triphone pass) DECODING ====="
+echo
+utils/mkgraph.sh data/$train_lang exp/tri_sat exp/tri_sat/graph 
+steps/decode.sh --config conf/decode.config --nj $nj --cmd "$decode_cmd" exp/tri_sat/graph data/test exp/tri_sat/decode
 
 
 echo ============================================================================
