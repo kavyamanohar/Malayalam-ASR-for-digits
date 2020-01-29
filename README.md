@@ -109,7 +109,7 @@ From the `/raw` data directory of language vocabulary lexicon, a list of phones 
 
 ## N-gram language model creation
 
-Once the data is ready n-gram language model can be created. Here it is done using IRSTLM toolkit.It prodices language model in ARPA format. Final language model in FST format, `G.fst` is available in `/data/lang_ngram/G.fst`.
+Once the data is ready n-gram language model can be created. Here it is done using IRSTLM toolkit. It produces language model in ARPA format. Final language model in FST format, `G.fst` is available in `/data/lang_ngram/G.fst`.
 
 # TRAINING GMM-HMM
 
