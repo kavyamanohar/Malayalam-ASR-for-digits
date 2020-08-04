@@ -5,112 +5,112 @@
 
 
 #Remove existing data
-rm -rf data
-rm -rf exp
-rm -rf mfcc
+# rm -rf data
+# rm -rf exp
+# rm -rf mfcc
 
-#Create fresh data files
-mkdir data
-mkdir -p data/local/dict
+# #Create fresh data files
+# mkdir data
+# mkdir -p data/local/dict
 
-for folder in train test
-do
-mkdir data/$folder
+# for folder in train test
+# do
+# mkdir data/$folder
 
-echo ============================================================================
-echo "                  Preparing Data Files for Featue extraction   	        "
-echo ============================================================================
+# echo ============================================================================
+# echo "                  Preparing Data Files for Featue extraction   	        "
+# echo ============================================================================
 
-#Read path of wave files and store it as a temporary file wavefilepaths.txt 
-realpath ./raw/waves/$folder/*.wav > ./data/$folder/wavefilepaths.txt
+# #Read path of wave files and store it as a temporary file wavefilepaths.txt 
+# realpath ./raw/waves/$folder/*.wav > ./data/$folder/wavefilepaths.txt
 
-echo "Creating the list of utterence IDs"
+# echo "Creating the list of utterence IDs"
 
-#The function is to extract the utterance id
-cat ./data/$folder/wavefilepaths.txt | xargs -l basename -s .wav > ./data/$folder/utt
-
-
-echo "Creating the list of utterence IDs mapped to absolute file paths of wavefiles"
+# #The function is to extract the utterance id
+# cat ./data/$folder/wavefilepaths.txt | xargs -l basename -s .wav > ./data/$folder/utt
 
 
-#Create wav.scp mapping from uttrence id to absolute wave file paths
-paste ./data/$folder/utt ./data/$folder/wavefilepaths.txt > ./data/$folder/wav.scp
+# echo "Creating the list of utterence IDs mapped to absolute file paths of wavefiles"
 
 
-echo "Creating the list of speaker IDs"
-
-#Create speaker id list
-cat ./data/$folder/utt | cut -d '_' -f 1 > ./data/$folder/spk
-
-echo "Creating the list of Utterance IDs mapped to corresponding speaker Ids"
-
-#Create utt2spk
-paste ./data/$folder/utt ./data/$folder/spk > ./data/$folder/utt2spk
-
-echo "Creating the list of Speaker IDs mapped to corresponding list of utterance Ids"
-
-#Create spk2utt
-./utils/utt2spk_to_spk2utt.pl ./data/$folder/utt2spk > ./data/$folder/spk2utt
-
-rm ./data/$folder/wavefilepaths.txt
+# #Create wav.scp mapping from uttrence id to absolute wave file paths
+# paste ./data/$folder/utt ./data/$folder/wavefilepaths.txt > ./data/$folder/wav.scp
 
 
-echo ============================================================================
-echo "                 MFCC Feature Extraction and Mean-Variance Tuning Files       	        "
-echo ============================================================================
+# echo "Creating the list of speaker IDs"
 
-#Create feature vectors
-./steps/make_mfcc.sh --nj 1 data/$folder exp/make_mfcc/$folder mfcc
+# #Create speaker id list
+# cat ./data/$folder/utt | cut -d '_' -f 1 > ./data/$folder/spk
 
-#Copy the feature in text file formats for human reading
-copy-feats ark:./mfcc/raw_mfcc_$folder.1.ark ark,t:./mfcc/raw_mfcc_$folder.1.txt
+# echo "Creating the list of Utterance IDs mapped to corresponding speaker Ids"
 
+# #Create utt2spk
+# paste ./data/$folder/utt ./data/$folder/spk > ./data/$folder/utt2spk
 
-#Create Mean Variance Tuning
-steps/compute_cmvn_stats.sh data/$folder exp/make_mfcc/$folder mfcc
+# echo "Creating the list of Speaker IDs mapped to corresponding list of utterance Ids"
 
+# #Create spk2utt
+# ./utils/utt2spk_to_spk2utt.pl ./data/$folder/utt2spk > ./data/$folder/spk2utt
 
-
-echo ============================================================================
-echo "                  Preparing Data Files for Language Modeling  	        "
-echo ============================================================================
-
-#The function is to extract the utterance id
-realpath ./raw/text/$folder/*.lab | xargs -l basename -s .lab > ./data/$folder/textutt
-
-echo "Creating the list of transcripts"
-paste -d '\n' ./raw/text/$folder/*.lab > ./data/$folder/trans
-
-echo "Creating the text file of uttid mapped to transcript"
-paste ./data/$folder/textutt ./data/$folder/trans > ./data/$folder/text
+# rm ./data/$folder/wavefilepaths.txt
 
 
-done
+# echo ============================================================================
+# echo "                 MFCC Feature Extraction and Mean-Variance Tuning Files       	        "
+# echo ============================================================================
 
-echo "Creating LM model creation input file"
-while read line
-do
-echo "<s> $line </s>" >> ./data/train/lm_train.txt
-done <./data/train/trans
+# #Create feature vectors
+# ./steps/make_mfcc.sh --nj 1 data/$folder exp/make_mfcc/$folder mfcc
 
-
-echo ============================================================================
-echo "                  Preparing the Language Dictionary       	        "
-echo ============================================================================
-echo "Creating the sorted lexicon file"
-sort ./raw/language/lexicon.txt | paste > ./data/local/dict/lexicon.txt 
+# #Copy the feature in text file formats for human reading
+# copy-feats ark:./mfcc/raw_mfcc_$folder.1.ark ark,t:./mfcc/raw_mfcc_$folder.1.txt
 
 
-echo "Creating the list of Phones"
-cat ./data/local/dict/lexicon.txt | cut -d '	' -f 2  - | tr ' ' '\n' | sort | uniq > ./data/local/dict/phones.txt 
-
-cat ./data/local/dict/phones.txt | sed /sil/d > ./data/local/dict/nonsilence_phones.txt 
-
-echo "sil" > ./data/local/dict/silence_phones.txt 
-echo "sil" > ./data/local/dict/optional_silence.txt 
+# #Create Mean Variance Tuning
+# steps/compute_cmvn_stats.sh data/$folder exp/make_mfcc/$folder mfcc
 
 
-touch ./data/local/dict/extra_phones.txt ./data/local/dict/extra_questions.txt
+
+# echo ============================================================================
+# echo "                  Preparing Data Files for Language Modeling  	        "
+# echo ============================================================================
+
+# #The function is to extract the utterance id
+# realpath ./raw/text/$folder/*.lab | xargs -l basename -s .lab > ./data/$folder/textutt
+
+# echo "Creating the list of transcripts"
+# paste -d '\n' ./raw/text/$folder/*.lab > ./data/$folder/trans
+
+# echo "Creating the text file of uttid mapped to transcript"
+# paste ./data/$folder/textutt ./data/$folder/trans > ./data/$folder/text
+
+
+# done
+
+# echo "Creating LM model creation input file"
+# while read line
+# do
+# echo "<s> $line </s>" >> ./data/train/lm_train.txt
+# done <./data/train/trans
+
+
+# echo ============================================================================
+# echo "                  Preparing the Language Dictionary       	        "
+# echo ============================================================================
+# echo "Creating the sorted lexicon file"
+# sort ./raw/language/lexicon.txt | paste > ./data/local/dict/lexicon.txt 
+
+
+# echo "Creating the list of Phones"
+# cat ./data/local/dict/lexicon.txt | cut -d '	' -f 2  - | tr ' ' '\n' | sort | uniq > ./data/local/dict/phones.txt 
+
+# cat ./data/local/dict/phones.txt | sed /sil/d > ./data/local/dict/nonsilence_phones.txt 
+
+# echo "sil" > ./data/local/dict/silence_phones.txt 
+# echo "sil" > ./data/local/dict/optional_silence.txt 
+
+
+# touch ./data/local/dict/extra_phones.txt ./data/local/dict/extra_questions.txt
 
 
 
@@ -129,7 +129,7 @@ train_dict=dict
 train_lang=lang_bigram
 train_folder=train
 
-n_gram=2 # This specifies bigram or trigram. for bigram set n_gram=2 for tri_gram set n_gram=3
+n_gram=6 # This specifies bigram or trigram. for bigram set n_gram=2 for tri_gram set n_gram=3
 
 echo ============================================================================
 echo "                   Creating  n-gram LM               	        "
@@ -152,7 +152,7 @@ $kaldi_root_dir/src/fstbin/fstisstochastic data/$train_lang/G.fst
 echo "===== MONO TRAINING ====="
 echo
 
-nj=1
+nj=4
 steps/train_mono.sh --nj $nj --cmd "$train_cmd"  data/train data/$train_lang exp/mono  || exit 1
 
 

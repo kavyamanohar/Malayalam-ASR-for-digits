@@ -4,29 +4,29 @@
 [ -f path.sh ] && . ./path.sh
 
 
-echo ============================================================================
-echo "          Preparing Data Files for Language Modeling  	        "
-echo ============================================================================
+# echo ============================================================================
+# echo "          Preparing Data Files for Language Modeling  	        "
+# echo ============================================================================
 
-for folder in train test
-do
+# for folder in train test
+# do
 
-#The function is to extract the utterance id
-realpath ./raw/text/$folder/*.lab | xargs -l basename -s .lab > ./data/$folder/textutt
+# #The function is to extract the utterance id
+# realpath ./raw/text/$folder/*.lab | xargs -l basename -s .lab > ./data/$folder/textutt
 
-echo "Creating the list of transcripts"
-paste -d '\n' ./raw/text/$folder/*.lab > ./data/$folder/trans
+# echo "Creating the list of transcripts"
+# paste -d '\n' ./raw/text/$folder/*.lab > ./data/$folder/trans
 
-echo "Creating the text file of uttid mapped to transcript"
-paste ./data/$folder/textutt ./data/$folder/trans > ./data/$folder/text
+# echo "Creating the text file of uttid mapped to transcript"
+# paste ./data/$folder/textutt ./data/$folder/trans > ./data/$folder/text
 
-done
+# done
 
-echo "Creating LM model creation input file"
-while read line
-do
-echo "<s> $line </s>" >> ./data/train/lm_train.txt
-done <./data/train/trans
+# echo "Creating LM model creation input file"
+# while read line
+# do
+# echo "<s> $line </s>" >> ./data/train/lm_train.txt
+# done <./data/train/trans
 
 
 echo ============================================================================
@@ -66,7 +66,7 @@ train_dict=dict
 train_lang=lang_bigram
 train_folder=train
 
-n_gram=2 # This specifies bigram or trigram. for bigram set n_gram=2 for tri_gram set n_gram=3
+n_gram=5 # This specifies bigram or trigram. for bigram set n_gram=2 for tri_gram set n_gram=3
 
 echo ============================================================================
 echo "                   Creating  n-gram LM               	        "
@@ -83,7 +83,6 @@ gunzip -c $basepath/data/local/tmp_$train_lang/lm_phone_bg.ilm.gz | utils/find_a
 
 gunzip -c $basepath/data/local/tmp_$train_lang/lm_phone_bg.ilm.gz | grep -v '<s> <s>' | grep -v '<s> </s>' | grep -v '</s> </s>' | grep -v 'SIL' | $kaldi_root_dir/src/lmbin/arpa2fst - | fstprint | utils/remove_oovs.pl data/local/tmp_$train_lang/oov.txt | utils/eps2disambig.pl | utils/s2eps.pl | fstcompile --isymbols=data/$train_lang/words.txt --osymbols=data/$train_lang/words.txt --keep_isymbols=false --keep_osymbols=false | fstrmepsilon > data/$train_lang/G.fst 
 $kaldi_root_dir/src/fstbin/fstisstochastic data/$train_lang/G.fst 
-
 
 
 echo ============================================================================
