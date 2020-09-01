@@ -1,0 +1,13 @@
+!sil	SIL
+<UNK>	SIL
+ആറ്	AX R U
+അഞ്ച്	AN CH U
+എട്ട്	E T U
+ഏഴ്	EX ZH U
+മൂന്ന്	M UX N U
+നാല്	N AX L U
+ഒന്ന്	O N U
+ഒമ്പത്	O M P A TH U
+പൂജ്യം	P UX J Y A M
+രണ്ട്	R A N D U
+sil	sil
