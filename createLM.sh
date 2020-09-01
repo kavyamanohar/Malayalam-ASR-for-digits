@@ -55,10 +55,12 @@ echo ===========================================================================
 echo "                  Preparing the Language Model Files    	        "
 echo ============================================================================
 
-#kaldi_root_dir='../..'
-kaldi_root_dir='/home/kavya/kavyadev/kaldi'
+kaldi_root_dir='../..'
+#kaldi_root_dir='/home/kavya/kavyadev/kaldi'
 basepath='.'
 
+ls $kaldi_root_dir
+ls $basepath
 
 lm_arpa_path=$basepath/data/local/lm
 
